@@ -21,9 +21,9 @@ use crate::{
     },
     doc_comment::CommentAttributes,
     schema_type::SchemaType,
-    as_tokens_or_diagnostics, Array, AttributesExt, Diagnostics, ToTokensDiagnostics,
+    token_stream::{Diagnostics, ToTokensDiagnostics, as_tokens_or_diagnostics},
+    Array, AttributesExt,
 };
-
 use super::{features, serde, NamedStructSchema, Root, UnnamedStructSchema};
 
 #[cfg_attr(feature = "debug", derive(Debug))]
