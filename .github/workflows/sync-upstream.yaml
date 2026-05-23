@@ -89,7 +89,7 @@ jobs:
           # (e.g. manual conflict resolution from a previous run), don't
           # clobber that work. Comment on the PR instead.
           PR_NUM=$(gh pr list --head "${SYNC_BRANCH}" --base "${FORK_BRANCH}" \
-                     --state open --json number --jq '.[0].number')
+                     --state open --json number --jq '.[0].number // empty')
           if [ -n "${PR_NUM}" ] && git rev-parse --verify "origin/${SYNC_BRANCH}" >/dev/null 2>&1; then
             HUMAN_AHEAD=$(git rev-list --count "HEAD..origin/${SYNC_BRANCH}")
             if [ "${HUMAN_AHEAD}" -gt 0 ]; then
@@ -119,7 +119,7 @@ jobs:
           EOF
           )
           EXISTING=$(gh pr list --head "${SYNC_BRANCH}" --base "${FORK_BRANCH}" \
-                       --state open --json number --jq '.[0].number')
+                       --state open --json number --jq '.[0].number // empty')
           if [ -z "${EXISTING}" ]; then
             gh pr create --base "${FORK_BRANCH}" --head "${SYNC_BRANCH}" \
                          --title "${TITLE}" --body "${BODY}"
@@ -157,7 +157,7 @@ jobs:
           )
           EXISTING=$(gh issue list --state open --search "Upstream sync conflict in:title" \
                        --json number,title \
-                       --jq '[.[] | select(.title | startswith("Upstream sync conflict"))] | .[0].number')
+                       --jq '[.[] | select(.title | startswith("Upstream sync conflict"))] | .[0].number // empty')
           if [ -z "${EXISTING}" ]; then
             gh issue create --title "${TITLE}" --body "${BODY}"
           else
